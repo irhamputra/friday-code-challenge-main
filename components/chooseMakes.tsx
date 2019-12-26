@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchMakes } from '../lib/useSearchMakes';
 import ErrorMessage from './errMessage';
 import LoadingMessage from './loadingMessage';
+import ChooseModels from './chooseModels';
 
 const ChooseMakes: React.FC = () => {
     const [make, setMake] = useState('');
@@ -56,6 +57,8 @@ const ChooseMakes: React.FC = () => {
                     <div>Suggestion car: {renderListSuggestion()}</div>
                 </div>
             )}
+
+            {make && <ChooseModels make={make} />}
         </div>
     );
 };
