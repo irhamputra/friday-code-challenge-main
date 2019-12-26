@@ -1,41 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchMakes } from '../lib/useSearchMakes';
+import ErrorMessage from './errMessage';
+import LoadingMessage from './loadingMessage';
 
 const ChooseMakes: React.FC = () => {
     const [make, setMake] = useState('');
     const { loading, makes, error } = useSearchMakes();
 
-    if (loading) return <h1>Loading...</h1>;
-    if (error) return <p>Error!</p>;
+    useEffect(() => {
+        if (makes.length < 0) {
+            return;
+        }
+
+        for (let manufacture of makes) {
+            const carArr = manufacture.split('');
+            // console.log(carArr);
+        }
+    }, [makes]);
+
+    useEffect(() => {
+        console.log([...make]);
+    }, [make]);
 
     const onHandleChange = e => {
         setMake(e.target.value);
     };
 
     const renderListSuggestion = () => {
-        return makes
-            .filter(
-                manufactures =>
-                    manufactures.toLowerCase() === make.toLowerCase()
-            )
-            .map((make, i) => {
+        return makes.map((make: string, i) => {
+            if (make.includes('BMW') || make.includes('FORD')) {
                 return (
-                    <li onClick={() => console.log(make)} key={i}>
+                    <li onClick={() => setMake(make)} key={i}>
                         {make}
                     </li>
                 );
-            });
+            }
+        });
     };
 
     return (
         <div>
-            <input
-                name='makes'
-                value={make}
-                placeholder='type manufacture here..'
-                onChange={onHandleChange}
-            />
-            <ul>{renderListSuggestion()}</ul>
+            {error ? (
+                <ErrorMessage text='Oops connection lost, please try again' />
+            ) : loading ? (
+                <LoadingMessage text='Please wait, we do a magic' />
+            ) : (
+                <div>
+                    <p>Selected car: {make}</p>
+                    <input
+                        name='makes'
+                        value={make}
+                        placeholder='type manufacture here..'
+                        onChange={onHandleChange}
+                    />
+                    <div>Suggestion car: {renderListSuggestion()}</div>
+                </div>
+            )}
         </div>
     );
 };

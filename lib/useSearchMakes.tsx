@@ -17,9 +17,7 @@ export const useSearchMakes = () => {
                 cancelToken: new axios.CancelToken(c => (cancel = c))
             })
             .then(res => {
-                setMakes(() => {
-                    return ['Choose Manufactures', ...res.data];
-                });
+                setMakes(res.data);
                 setLoading(false);
             })
             .catch(err => {
