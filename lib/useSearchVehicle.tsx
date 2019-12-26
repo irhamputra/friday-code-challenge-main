@@ -5,11 +5,11 @@ import { Car } from '../types/Car';
 export const useSearchVehicle = (car: Car) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [vehicle, setVehicle] = useState([]);
+    const [vehicles, setVehicles] = useState([]);
     const { make, model } = car;
 
     useEffect(() => {
-        setVehicle([]);
+        setVehicles([]);
     }, [make, model]);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ export const useSearchVehicle = (car: Car) => {
                 cancelToken: new axios.CancelToken(c => (cancel = c))
             })
             .then(res => {
-                setVehicle(res.data);
+                setVehicles(res.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -35,5 +35,5 @@ export const useSearchVehicle = (car: Car) => {
         return () => cancel();
     }, [make, model]);
 
-    return { loading, error, vehicle };
+    return { loading, error, vehicles };
 };
