@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import axios, { instance } from '../config/http';
-import { Make } from '../types/Car';
+import { Car } from '../types/Car';
 
-export const useSearchModels = (make: Make) => {
+export const useSearchVehicle = (car: Car) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [models, setModels] = useState([]);
+    const [vehicle, setVehicle] = useState([]);
+    const { make, model } = car;
 
     useEffect(() => {
-        setModels([]);
-    }, [make]);
+        setVehicle([]);
+    }, [make, model]);
 
     useEffect(() => {
         setLoading(true);
@@ -18,12 +19,12 @@ export const useSearchModels = (make: Make) => {
         let cancel: () => void;
 
         instance
-            .get('/models', {
-                params: { make },
+            .get('/vehicles', {
+                params: { make, model },
                 cancelToken: new axios.CancelToken(c => (cancel = c))
             })
             .then(res => {
-                setModels(res.data);
+                setVehicle(res.data);
                 setLoading(false);
             })
             .catch(err => {
@@ -32,7 +33,7 @@ export const useSearchModels = (make: Make) => {
             });
 
         return () => cancel();
-    }, [make]);
+    }, [make, model]);
 
-    return { loading, error, models };
+    return { loading, error, vehicle };
 };

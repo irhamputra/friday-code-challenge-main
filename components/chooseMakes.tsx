@@ -13,6 +13,7 @@ const ChooseMakes: React.FC = () => {
             return;
         }
 
+        // TODO: WIP Car
         for (let manufacture of makes) {
             const carArr = manufacture.split('');
             // console.log(carArr);
